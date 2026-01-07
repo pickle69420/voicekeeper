@@ -3,7 +3,7 @@
   "image": "mcr.microsoft.com/vscode/devcontainers/javascript-node:0-20",
   "forwardPorts": [3000],
   "workspaceFolder": "/workspace",
-  "postCreateCommand": "npm install",
+  "postCreateCommand": "npm install && bash .devcontainer/create-env.sh",
   "customizations": {
     "vscode": {
       "extensions": [
