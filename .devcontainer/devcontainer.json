@@ -1,0 +1,20 @@
+{
+  "name": "VoiceKeeper Devcontainer",
+  "image": "mcr.microsoft.com/vscode/devcontainers/javascript-node:0-20",
+  "forwardPorts": [3000],
+  "workspaceFolder": "/workspace",
+  "postCreateCommand": "npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "bradlc.vscode-tailwindcss",
+        "Prisma.prisma",
+        "eamodio.gitlens",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  "remoteUser": "node"
+}

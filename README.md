@@ -1,36 +1,154 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VoiceKeeper
+
+A Progressive Web App for memory preservation through voice recording and AI-powered semantic search.
+
+## Features
+
+### 🎤 Voice Recording
+- Real-time voice transcription using AssemblyAI
+- Speaker diarization support
+- Waveform visualization during recording
+- Auto-save recordings with transcripts
+
+### 🔍 Smart Search
+- **Instant Search**: Fast keyword-based search
+- **AI Search**: Semantic vector search using embeddings
+- **RAG Answers**: AI-generated answers with source citations
+
+### 🧠 Brain Training
+- **Memory Match**: Card matching game for visual memory
+- **Word Recall**: Word memorization exercise
+- **Daily Quiz**: Knowledge questions for cognitive engagement
+
+### 📊 Progress Tracking
+- Activity streaks and statistics
+- Weekly progress visualization
+- Engagement scoring
+
+## Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS with custom design tokens
+- **UI Components**: Radix UI primitives
+- **Animations**: Framer Motion
+- **Database**: PostgreSQL via Prisma ORM
+- **Vector Storage**: Pinecone (optional)
+- **Transcription**: AssemblyAI (real-time WebSocket)
+- **AI**: OpenAI GPT-4 Turbo & text-embedding-3-large (optional)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+
+- npm or yarn
+- PostgreSQL database (local, Railway, Neon, etc.)
+- AssemblyAI API key (required for transcription)
+- Pinecone account (optional - for semantic search)
+- OpenAI API key (optional - for RAG answers)
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/voicekeeper.git
+cd voicekeeper
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Create a `.env.local` file based on `.env.example`:
+```bash
+cp .env.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Configure your environment variables:
+```env
+# Database (required)
+DATABASE_URL=postgresql://username:password@localhost:5432/voicekeeper
 
-## Learn More
+# AssemblyAI (required for transcription)
+ASSEMBLYAI_API_KEY=your-assemblyai-api-key
 
-To learn more about Next.js, take a look at the following resources:
+# Pinecone (optional - for semantic search)
+PINECONE_API_KEY=your-pinecone-api-key
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# OpenAI (optional - for RAG answers)
+OPENAI_API_KEY=your-openai-api-key
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5. Set up the database:
+```bash
+# Generate Prisma client
+npx prisma generate
 
-## Deploy on Vercel
+# Push schema to database
+npx prisma db push
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+6. (Optional) Create a Pinecone index for semantic search:
+   - Name: `voicekeeper-memories`
+   - Dimensions: 3072
+   - Metric: cosine
+   - Region: AWS us-east-1
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+7. Start the development server:
+```bash
+npm run dev
+```
+
+8. Open [http://localhost:3000](http://localhost:3000)
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── api/               # API routes
+│   │   ├── assemblyai/    # AssemblyAI token endpoint
+│   │   ├── recordings/    # Recording CRUD
+│   │   ├── search/        # Search endpoints
+│   │   ├── games/         # Game sessions
+│   │   ├── progress/      # Stats endpoints
+│   │   └── ...
+│   ├── train/             # Brain games hub
+│   ├── memories/          # Search page
+│   ├── progress/          # Stats dashboard
+│   ├── settings/          # Settings page
+│   └── about/             # About page
+├── components/
+│   ├── ui/                # Base UI components
+│   ├── navigation/        # TopBar, DrawerMenu
+│   ├── recording/         # Recording components
+│   ├── search/            # Search components
+│   └── games/             # Brain game components
+├── lib/
+│   ├── prisma.ts          # Prisma client
+│   ├── pinecone.ts        # Pinecone client
+│   ├── openai.ts          # OpenAI client & RAG
+│   ├── chunking.ts        # Transcript chunking
+│   └── utils.ts           # Utility functions
+└── types/
+    └── index.ts           # TypeScript types
+```
+
+## PWA Support
+
+VoiceKeeper is a Progressive Web App with:
+- Offline support via Service Worker
+- App manifest for installation
+- Background sync for offline recordings
+- Push notifications for reminders
+
+## License
+
+MIT License - feel free to use this project for personal or commercial purposes.
+
+## Acknowledgments
+
+- Built with care for those experiencing memory challenges and their families
+- Inspired by the need to preserve precious memories

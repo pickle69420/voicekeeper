@@ -1,0 +1,17 @@
+{
+  "files.exclude": {
+    "**/.next": true,
+    "**/node_modules": true,
+    "**/.env": true
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "prettier.requireConfig": true,
+  "eslint.validate": ["javascript", "typescript", "typescriptreact", "javascriptreact"],
+  "tailwindCSS.experimental.classRegex": ["tw\\(\\`([^`]*)\\`\\)", "className\\=(?:\"|\\')(.*?)(?:\"|\\')"],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "terminal.integrated.shell.windows": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+}

@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Recording {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now()) @map("created_at")
+  title       String?
+  description String?  @db.Text
+  audioUrl    String   @map("audio_url")
+  duration    Int?     // duration in seconds
+  fileSize    Int?     @map("file_size")
+
+  transcript Transcript?
+  embeddings Embedding[]
+
+  @@map("recordings")
+}
+
+model Transcript {
+  id          String   @id @default(uuid())
+  recordingId String   @unique @map("recording_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  text        String   @db.Text
+  confidence  Float?
+  language    String   @default("en")
+  words       Json     @default("[]")
+
+  recording Recording @relation(fields: [recordingId], references: [id], onDelete: Cascade)
+
+  @@map("transcripts")
+}
+
+model Embedding {
+  id          String   @id @default(uuid())
+  recordingId String   @map("recording_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  chunkText   String   @map("chunk_text") @db.Text
+  chunkIndex  Int      @map("chunk_index")
+  pineconeId  String   @map("pinecone_id")
+
+  recording Recording @relation(fields: [recordingId], references: [id], onDelete: Cascade)
+
+  @@map("embeddings")
+}
+
+model BrainGameSession {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now()) @map("created_at")
+  gameType    String    @map("game_type")
+  score       Int
+  maxScore    Int       @default(100) @map("max_score")
+  difficulty  String    @default("medium")
+  duration    Int?      // duration in seconds
+  completedAt DateTime? @map("completed_at")
+  metadata    Json?
+
+  @@map("brain_game_sessions")
+}
+
+model UserStats {
+  id              String    @id @default(uuid())
+  totalRecordings Int       @default(0) @map("total_recordings")
+  totalMinutes    Int       @default(0) @map("total_minutes")
+  totalGames      Int       @default(0) @map("total_games")
+  currentStreak   Int       @default(0) @map("current_streak")
+  longestStreak   Int       @default(0) @map("longest_streak")
+  lastActivityAt  DateTime? @map("last_activity_at")
+  updatedAt       DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  @@map("user_stats")
+}
